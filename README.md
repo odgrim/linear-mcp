@@ -87,7 +87,7 @@ This method is more secure and recommended for production environments and multi
          "command": "node",
          "args": ["/path/to/linear-mcp/build/index.js"],
          "env": {
-           "LINEAR_ACCESS_TOKEN": "your_personal_access_token"  // Optional: can use linear_auth_api_key instead
+           "LINEAR_ACCESS_TOKEN": "your_personal_access_token_or_api_key"
          },
          "disabled": false,
          "autoApprove": []

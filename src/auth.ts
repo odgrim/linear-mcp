@@ -108,9 +108,21 @@ export class LinearAuth {
         expiresAt: Date.now() + data.expires_in * 1000,
       };
 
-      this.linearClient = new LinearClient({
-        accessToken: this.tokenData.accessToken,
-      });
+      // Check if the token is an API key (starts with "lin_api")
+      // API keys should not use the Bearer prefix
+      const isApiKey = data.access_token.startsWith('lin_api');
+      
+      if (isApiKey) {
+        // For API keys, don't use Bearer prefix
+        this.linearClient = new LinearClient({
+          apiKey: data.access_token,
+        });
+      } else {
+        // For OAuth tokens, use Bearer prefix (default behavior)
+        this.linearClient = new LinearClient({
+          accessToken: data.access_token,
+        });
+      }
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
@@ -156,9 +168,21 @@ export class LinearAuth {
         expiresAt: Date.now() + data.expires_in * 1000,
       };
 
-      this.linearClient = new LinearClient({
-        accessToken: this.tokenData.accessToken,
-      });
+      // Check if the token is an API key (starts with "lin_api")
+      // API keys should not use the Bearer prefix
+      const isApiKey = data.access_token.startsWith('lin_api');
+      
+      if (isApiKey) {
+        // For API keys, don't use Bearer prefix
+        this.linearClient = new LinearClient({
+          apiKey: data.access_token,
+        });
+      } else {
+        // For OAuth tokens, use Bearer prefix (default behavior)
+        this.linearClient = new LinearClient({
+          accessToken: data.access_token,
+        });
+      }
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
@@ -175,9 +199,22 @@ export class LinearAuth {
         refreshToken: '', // Not needed for PAT
         expiresAt: Number.MAX_SAFE_INTEGER, // PATs don't expire
       };
-      this.linearClient = new LinearClient({
-        accessToken: config.accessToken,
-      });
+      
+      // Check if the token is an API key (starts with "lin_api")
+      // API keys should not use the Bearer prefix
+      const isApiKey = config.accessToken.startsWith('lin_api');
+      
+      if (isApiKey) {
+        // For API keys, don't use Bearer prefix
+        this.linearClient = new LinearClient({
+          apiKey: config.accessToken,
+        });
+      } else {
+        // For OAuth tokens, use Bearer prefix (default behavior)
+        this.linearClient = new LinearClient({
+          accessToken: config.accessToken,
+        });
+      }
     } else {
       // OAuth flow
       if (!config.clientId || !config.clientSecret || !config.redirectUri) {
@@ -212,9 +249,22 @@ export class LinearAuth {
   // For testing purposes
   public setTokenData(tokenData: TokenData): void {
     this.tokenData = tokenData;
-    this.linearClient = new LinearClient({
-      accessToken: tokenData.accessToken,
-    });
+    
+    // Check if the token is an API key (starts with "lin_api")
+    // API keys should not use the Bearer prefix
+    const isApiKey = tokenData.accessToken.startsWith('lin_api');
+    
+    if (isApiKey) {
+      // For API keys, don't use Bearer prefix
+      this.linearClient = new LinearClient({
+        apiKey: tokenData.accessToken,
+      });
+    } else {
+      // For OAuth tokens, use Bearer prefix (default behavior)
+      this.linearClient = new LinearClient({
+        accessToken: tokenData.accessToken,
+      });
+    }
   }
 
   private generateState(): string {

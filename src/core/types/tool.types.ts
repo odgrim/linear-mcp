@@ -27,6 +27,21 @@ export const toolSchemas = {
     },
   },
 
+  linear_auth_api_key: {
+    name: 'linear_auth_api_key',
+    description: 'Authenticate with Linear using an API key',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        apiKey: {
+          type: 'string',
+          description: 'Linear API key',
+        },
+      },
+      required: ['apiKey'],
+    },
+  },
+
   linear_auth_callback: {
     name: 'linear_auth_callback',
     description: 'Handle OAuth callback',

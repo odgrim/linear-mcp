@@ -37,6 +37,27 @@ export class AuthHandler extends BaseHandler {
   }
 
   /**
+   * Authenticates with Linear using an API key.
+   */
+  async handleAuthApiKey(args: any): Promise<BaseToolResponse> {
+    try {
+      this.validateRequiredParams(args, ['apiKey']);
+
+      this.auth.initialize({
+        type: 'pat',
+        accessToken: args.apiKey,
+      });
+
+      // Note: The GraphQL client will be initialized in the handler factory
+      // after this method returns successfully
+
+      return this.createResponse('Successfully authenticated with Linear using API key');
+    } catch (error) {
+      this.handleError(error, 'authenticate with API key');
+    }
+  }
+
+  /**
    * Handles OAuth callback after user authorization.
    */
   async handleAuthCallback(args: any): Promise<BaseToolResponse> {

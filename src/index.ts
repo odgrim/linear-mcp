@@ -18,8 +18,9 @@ import { toolSchemas } from './core/types/tool.types.js';
  * 
  * Authentication options:
  * 1. Environment variable: LINEAR_ACCESS_TOKEN (set before starting the server)
- * 2. MCP tool: linear_auth_api_key (call during runtime with an API key)
- * 3. MCP tool: linear_auth (OAuth flow with browser authorization)
+ *    - Recommended for single-user scenarios and development
+ * 2. MCP tool: linear_auth (OAuth flow with browser authorization)
+ *    - Recommended for multi-user scenarios and production
  */
 class LinearServer {
   private server: Server;

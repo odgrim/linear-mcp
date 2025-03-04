@@ -18,9 +18,9 @@ An MCP server for interacting with Linear's API. This server provides a set of t
 
 ### 2. Authentication
 
-The server supports three authentication methods:
+The server supports two authentication methods:
 
-#### Personal Access Token via Environment Variable (Recommended for Development)
+#### Personal Access Token via Environment Variable (Recommended for Dev/Single Users)
 
 1. Go to Linear: Settings > API > OAuth application > "Cline MCP"
 2. Under "Developer Token", click "Create & copy token"
@@ -30,19 +30,11 @@ The server supports three authentication methods:
    LINEAR_ACCESS_TOKEN=your_personal_access_token
    ```
 
-#### API Key Authentication via MCP Tool (Recommended for Production)
+This method is simple and suitable for testing and development environments.
 
-You can authenticate at runtime using the `linear_auth_api_key` tool:
+Optionally, you can use an API key here instead.
 
-```json
-{
-  "apiKey": "your_linear_api_key"
-}
-```
-
-This allows you to keep your API key secure and not store it in environment variables.
-
-#### OAuth Flow (Alternative)
+#### OAuth Flow (Recommended for production)
 
 1. Create an OAuth application at https://linear.app/settings/api/applications
 2. Configure OAuth environment variables in `.env`:
@@ -51,7 +43,23 @@ This allows you to keep your API key secure and not store it in environment vari
    LINEAR_CLIENT_SECRET=your_oauth_client_secret
    LINEAR_REDIRECT_URI=http://localhost:3000/callback
    ```
-3. Use the `linear_auth` tool to initiate the OAuth flow.
+3. Use the `linear_auth` tool to initiate the OAuth flow:
+   ```json
+   {
+     "clientId": "your_client_id",
+     "clientSecret": "your_client_secret",
+     "redirectUri": "your_redirect_uri"
+   }
+   ```
+4. Follow the authorization URL to grant access
+5. Use the `linear_auth_callback` tool with the authorization code:
+   ```json
+   {
+     "code": "authorization_code_from_redirect"
+   }
+   ```
+
+This method is more secure and recommended for production environments and multi-user scenarios.
 
 ### 3. Running the Server
 
@@ -94,7 +102,6 @@ The server currently supports the following operations:
 
 ### Authentication
 - ✅ Personal Access Token (PAT) authentication via environment variable
-- ✅ API Key authentication via MCP tool
 - ✅ OAuth flow authentication
 - ✅ Secure token storage
 

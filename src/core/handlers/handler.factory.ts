@@ -42,7 +42,6 @@ export class HandlerFactory {
     const handlerMap: Record<string, { handler: any; method: string }> = {
       // Auth tools
       linear_auth: { handler: this.authHandler, method: 'handleAuth' },
-      linear_auth_api_key: { handler: this.authHandler, method: 'handleAuthApiKey' },
       linear_auth_callback: { handler: this.authHandler, method: 'handleAuthCallback' },
 
       // Issue tools
@@ -71,7 +70,7 @@ export class HandlerFactory {
     }
 
     // After authentication, reinitialize the GraphQL client and update all handlers
-    if ((toolName === 'linear_auth_callback' || toolName === 'linear_auth_api_key') && this.auth.isAuthenticated()) {
+    if (toolName === 'linear_auth_callback' && this.auth.isAuthenticated()) {
       this.reinitializeAfterAuth();
     }
 

@@ -15,7 +15,10 @@
     "start": "node build/index.js",
     "dev": "nodemon --watch src --ext ts --exec \"npm run build && npm start\""
   },
-  "keywords": [],
+  "keywords": [
+    "mcp",
+    "linear"
+  ],
   "author": "odgrim",
   "license": "ISC",
   "devDependencies": {
@@ -38,5 +41,12 @@
     "@modelcontextprotocol/sdk": "^1.4.0",
     "graphql": "^16.10.0",
     "graphql-tag": "^2.12.6"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/odgrim/linear-mcp.git"
   }
 }

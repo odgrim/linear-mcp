@@ -1,9 +1,15 @@
 {
   "name": "@odgrim/linear-mcp",
-  "version": "v0.0.1",
+  "version": "v0.0.2",
   "description": "fork of cline linear-mcp, fixed for api keys",
-  "main": "index.js",
   "type": "module",
+  "main": "build/index.js",
+  "bin": {
+    "mcp-datetime": "build/index.js"
+  },
+  "files": [
+    "build"
+  ],
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",

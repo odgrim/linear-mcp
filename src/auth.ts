@@ -48,6 +48,27 @@ export class LinearAuth {
 
   constructor() {}
 
+  /**
+   * Helper method to initialize the Linear client based on token type
+   * @param token The access token or API key
+   */
+  private initializeLinearClient(token: string): void {
+    // Check if the token is an API key (starts with "lin_api")
+    const isApiKey = token.startsWith('lin_api');
+    
+    if (isApiKey) {
+      // For API keys, don't use Bearer prefix
+      this.linearClient = new LinearClient({
+        apiKey: token,
+      });
+    } else {
+      // For OAuth tokens, use Bearer prefix (default behavior)
+      this.linearClient = new LinearClient({
+        accessToken: token,
+      });
+    }
+  }
+
   public getAuthorizationUrl(): string {
     if (!this.config || this.config.type !== 'oauth') {
       throw new McpError(
@@ -108,9 +129,7 @@ export class LinearAuth {
         expiresAt: Date.now() + data.expires_in * 1000,
       };
 
-      this.linearClient = new LinearClient({
-        accessToken: this.tokenData.accessToken,
-      });
+      this.initializeLinearClient(data.access_token);
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
@@ -156,9 +175,7 @@ export class LinearAuth {
         expiresAt: Date.now() + data.expires_in * 1000,
       };
 
-      this.linearClient = new LinearClient({
-        accessToken: this.tokenData.accessToken,
-      });
+      this.initializeLinearClient(data.access_token);
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
@@ -175,9 +192,8 @@ export class LinearAuth {
         refreshToken: '', // Not needed for PAT
         expiresAt: Number.MAX_SAFE_INTEGER, // PATs don't expire
       };
-      this.linearClient = new LinearClient({
-        accessToken: config.accessToken,
-      });
+      
+      this.initializeLinearClient(config.accessToken);
     } else {
       // OAuth flow
       if (!config.clientId || !config.clientSecret || !config.redirectUri) {
@@ -212,9 +228,7 @@ export class LinearAuth {
   // For testing purposes
   public setTokenData(tokenData: TokenData): void {
     this.tokenData = tokenData;
-    this.linearClient = new LinearClient({
-      accessToken: tokenData.accessToken,
-    });
+    this.initializeLinearClient(tokenData.accessToken);
   }
 
   private generateState(): string {

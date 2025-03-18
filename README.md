@@ -20,17 +20,21 @@ An MCP server for interacting with Linear's API. This server provides a set of t
 
 The server supports two authentication methods:
 
-#### Personal Access Token (Recommended)
+#### Personal Access Token via Environment Variable (Recommended for Dev/Single Users)
 
 1. Go to Linear: Settings > API > OAuth application > "Cline MCP"
 2. Under "Developer Token", click "Create & copy token"
 3. Select "Application"
-3. Add the token to your `.env` file:
+4. Add the token to your `.env` file:
    ```
    LINEAR_ACCESS_TOKEN=your_personal_access_token
    ```
 
-#### OAuth Flow (Alternative) ***NOT IMPLEMENTED***
+This method is simple and suitable for testing and development environments.
+
+Optionally, you can use an API key here instead.
+
+#### OAuth Flow (Recommended for production)
 
 1. Create an OAuth application at https://linear.app/settings/api/applications
 2. Configure OAuth environment variables in `.env`:
@@ -39,6 +43,23 @@ The server supports two authentication methods:
    LINEAR_CLIENT_SECRET=your_oauth_client_secret
    LINEAR_REDIRECT_URI=http://localhost:3000/callback
    ```
+3. Use the `linear_auth` tool to initiate the OAuth flow:
+   ```json
+   {
+     "clientId": "your_client_id",
+     "clientSecret": "your_client_secret",
+     "redirectUri": "your_redirect_uri"
+   }
+   ```
+4. Follow the authorization URL to grant access
+5. Use the `linear_auth_callback` tool with the authorization code:
+   ```json
+   {
+     "code": "authorization_code_from_redirect"
+   }
+   ```
+
+This method is more secure and recommended for production environments and multi-user scenarios.
 
 ### 3. Running the Server
 
@@ -66,7 +87,7 @@ The server supports two authentication methods:
          "command": "node",
          "args": ["/path/to/linear-mcp/build/index.js"],
          "env": {
-           "LINEAR_ACCESS_TOKEN": "your_personal_access_token"
+           "LINEAR_ACCESS_TOKEN": "your_personal_access_token_or_api_key"
          },
          "disabled": false,
          "autoApprove": []
@@ -78,6 +99,11 @@ The server supports two authentication methods:
 ## Available Actions
 
 The server currently supports the following operations:
+
+### Authentication
+- ✅ Personal Access Token (PAT) authentication via environment variable
+- ✅ OAuth flow authentication
+- ✅ Secure token storage
 
 ### Issue Management
 - ✅ Create issues with full field support (title, description, team, project, etc.)
@@ -95,10 +121,6 @@ The server currently supports the following operations:
 ### Team Management
 - ✅ Get team information (with states and workflow details)
 - ✅ Access team states and labels
-
-### Authentication
-- ✅ Personal Access Token (PAT) authentication
-- ✅ Secure token storage
 
 ### Batch Operations
 - ✅ Bulk issue creation

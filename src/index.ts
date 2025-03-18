@@ -15,6 +15,12 @@ import { toolSchemas } from './core/types/tool.types.js';
 /**
  * Main server class that handles MCP protocol interactions.
  * Delegates tool operations to domain-specific handlers.
+ * 
+ * Authentication options:
+ * 1. Environment variable: LINEAR_ACCESS_TOKEN (set before starting the server)
+ *    - Recommended for single-user scenarios and development
+ * 2. MCP tool: linear_auth (OAuth flow with browser authorization)
+ *    - Recommended for multi-user scenarios and production
  */
 class LinearServer {
   private server: Server;
@@ -37,7 +43,7 @@ class LinearServer {
 
     this.auth = new LinearAuth();
     
-    // Initialize with PAT if available
+    // Initialize with PAT if available in environment
     const accessToken = process.env.LINEAR_ACCESS_TOKEN;
     if (accessToken) {
       this.auth.initialize({

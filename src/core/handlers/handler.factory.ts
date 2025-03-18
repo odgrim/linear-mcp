@@ -16,8 +16,13 @@ export class HandlerFactory {
   private projectHandler: ProjectHandler;
   private teamHandler: TeamHandler;
   private userHandler: UserHandler;
+  private auth: LinearAuth;
+  private graphqlClient?: LinearGraphQLClient;
 
   constructor(auth: LinearAuth, graphqlClient?: LinearGraphQLClient) {
+    this.auth = auth;
+    this.graphqlClient = graphqlClient;
+    
     // Initialize all handlers with shared dependencies
     this.authHandler = new AuthHandler(auth, graphqlClient);
     this.issueHandler = new IssueHandler(auth, graphqlClient);
@@ -64,6 +69,25 @@ export class HandlerFactory {
       throw new Error(`No handler found for tool: ${toolName}`);
     }
 
+    // After authentication, reinitialize the GraphQL client and update all handlers
+    if (toolName === 'linear_auth_callback' && this.auth.isAuthenticated()) {
+      this.reinitializeAfterAuth();
+    }
+
     return handlerInfo;
+  }
+
+  /**
+   * Reinitializes all handlers with a new GraphQL client after authentication.
+   */
+  private reinitializeAfterAuth(): void {
+    this.graphqlClient = new LinearGraphQLClient(this.auth.getClient());
+    
+    // Reinitialize all handlers with the new GraphQL client
+    this.authHandler = new AuthHandler(this.auth, this.graphqlClient);
+    this.issueHandler = new IssueHandler(this.auth, this.graphqlClient);
+    this.projectHandler = new ProjectHandler(this.auth, this.graphqlClient);
+    this.teamHandler = new TeamHandler(this.auth, this.graphqlClient);
+    this.userHandler = new UserHandler(this.auth, this.graphqlClient);
   }
 }

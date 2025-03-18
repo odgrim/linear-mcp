@@ -1,5 +1,5 @@
 {
-  "name": "linear-mcp",
+  "name": "@odgrim/linear-mcp",
   "version": "v0.0.1",
   "description": "fork of cline linear-mcp, fixed for api keys",
   "main": "index.js",
@@ -16,7 +16,7 @@
     "dev": "nodemon --watch src --ext ts --exec \"npm run build && npm start\""
   },
   "keywords": [],
-  "author": "",
+  "author": "odgrim",
   "license": "ISC",
   "devDependencies": {
     "@types/dotenv": "^8.2.3",

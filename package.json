@@ -1,7 +1,7 @@
 {
   "name": "linear-mcp",
-  "version": "1.0.0",
-  "description": "",
+  "version": "v0.0.1",
+  "description": "fork of cline linear-mcp, fixed for api keys",
   "main": "index.js",
   "type": "module",
   "scripts": {
